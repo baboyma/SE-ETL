@@ -1,5 +1,5 @@
 # Import required python packages & modulesimport pymongo, datetime
-import pymongo
+import pymongo, datetime
 from pymongo import MongoClient
 
 ##

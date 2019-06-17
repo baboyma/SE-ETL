@@ -19,11 +19,13 @@ We used 3 Python Packages:
 
 1. requests: used for make a GET call to ONA API end-point
 2. json: used to convert the response into json format
-3. PyMongo: used to interact with a local MongoDB server
+3. datetime: used to track date/time of ETL Transaction
+4. PyMongo: used to interact with a local MongoDB server
 
 ```python
 pip install requests
 pip install json
+pip install datetime
 pip install pymongo
 ```
 
@@ -34,7 +36,7 @@ I am using MongoDB 4.0 on MacOS and you can find the documentation [here](https:
 
 You may want to use your terminal to make sure that your MongoDB is working properly. [Here](https://docs.mongodb.com/manual/crud/) is a link to some basic CRUD operations.
 
-Clone this repo and execute 
+Clone this repo and execute the following command through your terminal:
 ```python
 python etl-task.py
 ```
@@ -44,3 +46,4 @@ Let me know how it works on your end.
 I am open to feedback. Thank you in advance.
 
 
+Happy Coding!
