@@ -1,9 +1,16 @@
-import pymongo, datetime
+# Import required python packages & modulesimport pymongo, datetime
+import pymongo
 from pymongo import MongoClient
 
-# Create a connection to MongoDB
+##
+## Connection Class definition
+## This class will:
+## a) Create a MongoDB Connection 
+## b) Connect to the specified database
+## c) Add and/or Update new documents to selected collection
+##
 class Connection:
-
+    # Constructor
     def __init__(self, host = 'localhost', port = 27017):
         try:
             self.client = MongoClient(host, port)
@@ -13,8 +20,12 @@ class Connection:
             print("Connection to MangoDB Failed.")
             exit(1)
 
-    # connect to targeted database
+    # connect to targeted MongoDB database 
+    # once the connection string has been identified
     def connect(self, dbname, collection):
+        """ Take dbname & collection arguments as strings
+        and sets MongoDB name & collection objects """
+
         # get the list of existing db
         dbs = self.client.list_database_names()
 
@@ -30,7 +41,8 @@ class Connection:
         # select the targeted collection
         self.selectDBCollection(collection)
 
-    # Identify Target Collection
+
+    # Identify the targeted MongoDB Collection
     def selectDBCollection(self, collection):
         dbCols = self.db.list_collection_names()
 
@@ -49,24 +61,26 @@ class Connection:
             except:
                 print("Failed to create a new collection")
 
+
     # Find document by ID
     def find(self, id):
         return self.collection.count_documents({"fid": id})
 
-    # Add new objects
+    # Add new documents
     def add(self, doc):
-
+        # look up the current document
         n = self.find(doc['fid'])
 
-        print(n)
-
         if n == 0:
+            # Add a the document to the collection
             doc['imported_on'] = datetime.datetime.utcnow()
             self.collection.insert_one(doc)
         elif n == 1:
+            # Update the document
             self.edit(doc)
         else:
             print("Error - duplicated doc with ID: ", doc['fid'])
+
 
     # Update existing document
     def edit(self, doc):
@@ -81,12 +95,8 @@ class Connection:
 
 # Eg: Instantiate the connection class
 #conn = Connection()
-
 #conn.connect('bk-test', 'demosurvey')
 
-# conn.client.list_database_names()
-# conn.db.list_collection_names()
-# conn.client.list_database_names()
 
 
 

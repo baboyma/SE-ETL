@@ -1,13 +1,21 @@
+# Import required python packages & modules
 import requests, json
-import './libs/Connection.py' as mgoConn
+import Connection as mgoConn
 
-# Env Variables
+## Env Variables
+
+# MongoDB hostname: we are using 'localhost as default'
 host = 'localhost'
+# MongoDB Port: we are using the default port
 port = 27017
 
+# MongoDB Database name
 dbname = 'surveys'
+# MongoDB Collection name
 collection = 'abcsurvey'
 
+
+# Online WFP/VAM data resources
 api = 'https://api.ona.io/api/v1/data/'
 dataId = 185260
 
@@ -21,33 +29,32 @@ conn.connect(dbname, collection)
 ## Get data from ONA through the API
 req = requests.get(url)
 
-print(req.headers)
-
+# Check the status of the request
 if req.status_code != 200:
     print("GET request failed.")
     exit(1)
 
-# Close the connection
+# Close the request
 req.close()
 
 
 # Examine request
 #print(req.headers)
 
+# Get the content of the request's response
 data = req.content
-
+# Convert the response as collection of JSON objects (dictionaries)
 data = json.loads(data)
 
-#print(len(data))
 
-#print(data[0])
-
+# Tracker for the document being process
 tracker = 0
 
+""" This will loop through the data (array)
+and transform each document into a simplified version
+before loading each of them into MongoDB Collection"""
 for doc in data:
     tracker += 1
-
-    print(doc['_id'])
 
     newDoc = {
         'fid': doc.get('_id'),
@@ -67,9 +74,10 @@ for doc in data:
         'updated_on': ''
     }
 
-    print(newDoc)
+    print(tracker)
 
     # Add to db
     conn.add(newDoc)
+
 
 print("Total: ", tracker)
